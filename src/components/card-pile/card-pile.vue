@@ -3,16 +3,20 @@
     <div
       class="playing-card-inner-wrapper"
       v-for="(card, index) in pile"
-      :id="`${id}-${card.value}-${card.suit}`"
-      :key="`${id}-${card.value}-${card.suit}`"
-      :style="{ top: index*50 + 'px', left: index*3 + 'px', opacity: 1, transition: 'opacity 2s ease-in' }"
+      :id="`${order}-${card.value}-${card.suit}`"
+      :key="`${turn}-${order}-${card.value}-${card.suit}`"
+      :style="{
+        top: index*50 + 'px',
+        left: index*3 + 'px',
+        animation: `make-visible, slide-up 500ms ease-in-out`,
+        animationDelay: `${getAnimationDelay(index)}ms`,
+        animationFillMode: 'forwards'
+      }"
     >
-      <transition-group name="fade">
-        <vue-playing-card
-          :key="`${card.value}${card.suit}`"
-          :signature="`${card.value}${card.suit}`"
-        ></vue-playing-card>
-      </transition-group>
+      <vue-playing-card
+        :key="`${card.value}-${card.suit}`"
+        :signature="`${card.value}${card.suit}`"
+      ></vue-playing-card>
     </div>
   </div>
 </template>
@@ -21,10 +25,15 @@
 export default {
   name: "card-pile",
   props: {
-    id: { type: Number, required: true },
+    turn: { type: Number, required: true },
+    order: { type: Number, required: true },
     pile: { type: Array, default: () => [] }
   },
-  methods: {}
+  methods: {
+    getAnimationDelay(index) {
+      return Math.round((index + (this.order / 3)) * 1000);
+    }
+  }
 };
 </script>
 
@@ -34,15 +43,26 @@ export default {
 }
 .playing-card-inner-wrapper {
   position: absolute;
-  max-height: "199px";
+  opacity: 0;
+  height: 100px;
+  width: 100px;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: max-height 5s;
+@keyframes make-visible {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-.fade-enter,
-.fade-leave-to {
-  max-height: 0;
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 </style>
