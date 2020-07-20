@@ -2,8 +2,13 @@
   <div id="app">
     <div class="piles-container">
       <div v-for="(pile, index) in piles" :key="index" style="width: 230px">
-          <button :disabled="turn === 3" @click="onPileSelected(index)">Välj</button>
-        <card-pile :id="index" :pile="pile"></card-pile>
+        <v-btn
+          class="pile-button"
+          large
+          :disabled="turn === 3"
+          @click="onPileSelected(index)"
+        >Välj</v-btn>
+        <card-pile :order="index" :pile="pile" :turn="turn"></card-pile>
       </div>
     </div>
   </div>
@@ -104,5 +109,9 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+.pile-button {
+  color: purple;
 }
 </style>
