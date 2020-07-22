@@ -6,16 +6,16 @@
       :id="`${order}-${card.value}-${card.suit}`"
       :key="`${turn}-${order}-${card.value}-${card.suit}`"
       :style="{
-        top: index*50 + 'px',
-        left: index*3 + 'px',
-        animation: `make-visible, slide-up 500ms ease-in-out`,
+        animation,
         animationDelay: `${getAnimationDelay(index)}ms`,
-        animationFillMode: 'forwards'
+        animationFillMode: 'forwards',
+        left: `${index * 3}px`,
+        top: `${index * 50}px`
       }"
     >
       <vue-playing-card
         :key="`${card.value}-${card.suit}`"
-        :signature="`${card.value}${card.suit}`"
+        :signature="getSignature(card)"
       ></vue-playing-card>
     </div>
   </div>
@@ -29,9 +29,24 @@ export default {
     order: { type: Number, required: true },
     pile: { type: Array, default: () => [] }
   },
+  computed: {
+    animation() {
+      return this.turn < 3
+        ? `make-visible, slide-up 500ms ease-in-out`
+        : `make-visible, slide-down 500ms ease-out`
+    }
+  },
   methods: {
+    getSignature(card) {
+      return this.turn < 3
+        ? `${card.value}${card.suit}`
+        : null
+    },
     getAnimationDelay(index) {
-      return Math.round((index + (this.order / 3)) * 1000);
+      console.log(Math.round((index + (this.order / 3)) * 1000));
+      return this.turn < 3
+        ? Math.round((index + (this.order / 3)) * 1000)
+        : Math.floor(Math.random() * (1000 - 500)) + 0; 
     }
   }
 };
@@ -63,6 +78,15 @@ export default {
   }
   100% {
     transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(1000px);
   }
 }
 </style>

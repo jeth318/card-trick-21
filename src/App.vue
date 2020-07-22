@@ -1,38 +1,45 @@
 <template>
+<v-app>
   <div id="app">
+    <how-to-play></how-to-play>
+    <v-btn class="start-button" @click="dealCards">STARTA</v-btn>
     <div class="piles-container">
       <div v-for="(pile, index) in piles" :key="index" style="width: 230px">
         <v-btn
+          v-show="turn !== 3"
           class="pile-button"
           large
-          :disabled="turn === 3"
+          color="deep-purple"
+          :disabled="isDealing"
           @click="onPileSelected(index)"
         >Välj</v-btn>
         <card-pile :order="index" :pile="pile" :turn="turn"></card-pile>
       </div>
     </div>
+     <magic-card :card="deck[10]" :turned="turn === 3"></magic-card>
   </div>
+</v-app>
 </template>
 
 <script>
 import CardPile from "./components/card-pile/card-pile.vue";
+import MagicCard from "./components/magic-card/magic-card.vue";
+import HowToPlay from "./components/how-to-play/how-to-play.vue";
 import { shuffledDeckOf21 } from "./components/utils/card-util";
 
 export default {
   name: "App",
-  components: { CardPile },
+  components: { CardPile, HowToPlay, MagicCard },
   data: () => ({
     deck: shuffledDeckOf21,
     pileA: [],
     pileB: [],
     pileC: [],
-    turn: 0
-  }),
-  created() {
-    console.log(shuffledDeckOf21);
-  },
+    turn: 0,
+    isDealing: false
+  }), 
   mounted() {
-    this.dealCards();
+    // this.dealCards();
   },
   computed: {
     piles() {
@@ -44,6 +51,11 @@ export default {
   },
   methods: {
     dealCards() {
+      this.isDealing = true;
+      setTimeout(() => {
+        this.isDealing = false;
+      }, 7500);
+
       this.resetPiles();
       this.deck.forEach((card, index) => {
         switch (index % 3) {
@@ -93,7 +105,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
 }
 
@@ -112,6 +123,10 @@ export default {
 }
 
 .pile-button {
-  color: purple;
+  color: white !important;
+}
+
+.start-button, .pile-button {
+  margin-bottom: 40px;
 }
 </style>
