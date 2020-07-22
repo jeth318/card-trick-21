@@ -29,6 +29,7 @@ export default {
     order: { type: Number, required: true },
     pile: { type: Array, default: () => [] }
   },
+<<<<<<< HEAD
   computed: {
     animation() {
       return this.turn < 3
@@ -47,6 +48,11 @@ export default {
       return this.turn < 3
         ? Math.round((index + (this.order / 3)) * 1000)
         : Math.floor(Math.random() * (1000 - 500)) + 0; 
+=======
+  methods: {
+    getAnimationDelay(index) {
+      return Math.round((index + (this.order / 3)) * 1000);
+>>>>>>> ab85e7b66db5494b48620e8c81303e39c184ca72
     }
   }
 };
@@ -61,6 +67,7 @@ export default {
   opacity: 0;
   height: 100px;
   width: 100px;
+<<<<<<< HEAD
 }
 
 @keyframes make-visible {
@@ -87,6 +94,25 @@ export default {
   }
   100% {
     transform: translateX(1000px);
+=======
+}
+
+@keyframes make-visible {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(15px);
+  }
+  100% {
+    transform: translateY(0);
+>>>>>>> ab85e7b66db5494b48620e8c81303e39c184ca72
   }
 }
 </style>
