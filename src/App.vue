@@ -10,7 +10,7 @@
           class="pile-button"
           large
           color="deep-purple"
-          :disabled="isDealing"
+          :disabled="isDealing || !gameStarted"
           @click="onPileSelected(index)"
         >Välj</v-btn>
         <card-pile :order="index" :pile="pile" :turn="turn"></card-pile>
@@ -36,6 +36,7 @@ export default {
     pileB: [],
     pileC: [],
     turn: 0,
+    gameStarted: false,
     isDealing: false
   }), 
   mounted() {
@@ -51,6 +52,10 @@ export default {
   },
   methods: {
     dealCards() {
+      if (!this.gameStarted) {
+        this.gameStarted = true;
+      }
+
       this.isDealing = true;
       setTimeout(() => {
         this.isDealing = false;
